@@ -1,0 +1,38 @@
+html {
+  background-color: #969696;
+  padding: 10px 14px;
+}
+body {
+  background-color: rgb(159, 208, 208);
+  padding: 0 0 0 0;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: medium;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+p,
+th,
+td,
+li,
+div {
+  text-align: right;
+}
+
+.navbar {
+  margin-bottom: 1rem;
+  font-size: large;
+}
+
+.container {
+  margin: 0 1rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
