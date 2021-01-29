@@ -40,25 +40,31 @@ class Orders extends Component {
 
     if (totalCount === 0) return <p>لا يوجد فواتير في قاعدة البيانات</p>;
     return (
-      <React.Fragment>
+      <>
         <p>يظهر {totalCount} من الفواتير في قاعدة البيانات</p>
 
-        <Pagination
-          itemsCount={totalCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        ></Pagination>
+        <Link to="/orders/new" className="btn btn-primary mb-2">
+          إضافة فاتورة جديدة
+        </Link>
+
         <OrdersTable
           orders={orders}
           onDelete={this.handleDelete}
           onSort={this.handleSort}
           sortColumn={sortColumn}
-        ></OrdersTable>
-        <Link to="/orders/new" className="btn btn-primary mb-2">
-          إضافة فاتورة جديدة
-        </Link>
-      </React.Fragment>
+        />
+
+        <div className="row">
+          <div className="col">
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+            />
+          </div>
+        </div>
+      </>
     );
   }
 }
