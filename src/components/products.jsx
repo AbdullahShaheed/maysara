@@ -45,7 +45,7 @@ class Products extends Component {
   }
 
   handleDelete = (product) => {
-    if (!auth.getCurrentUser())
+    if (!auth.getCurrentUser() || !auth.getCurrentUser().isAdmin)
       return toast("فقط المستخدم الأدمن يستطيع الحذف");
 
     this.setState({ productToDelete: product });

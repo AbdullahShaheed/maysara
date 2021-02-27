@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import auth from "../services/authService";
 // import {
 //   getCustomers,
 //   deleteCustomer,
@@ -28,6 +29,9 @@ class Customers extends Component {
   }
 
   handleDelete = (customer) => {
+    if (!auth.getCurrentUser() || !auth.getCurrentUser().isAdmin)
+      return toast("فقط المستخدم الأدمن يستطيع الحذف");
+
     this.setState({ customerToDelete: customer });
     this.toggleModal();
   };
