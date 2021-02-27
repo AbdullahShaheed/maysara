@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { register } from "../services/userService";
 import Joi from "joi-browser";
 import Input from "./common/input";
 import Form from "./common/form";
@@ -27,9 +28,18 @@ class Regitser extends Form {
       }),
   };
 
-  doSubmit() {
-    //submit data to server, then redirect user to another page
-    console.log("submitted");
+  async doSubmit() {
+    try {
+      const response = await register(this.state.data);
+      localStorage.setItem("token", response.headers["x-auth-token"]);
+      this.props.history.push("/");
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = error.response.data;
+        this.setState({ errors });
+      }
+    }
   }
   render() {
     const { data, errors } = this.state;

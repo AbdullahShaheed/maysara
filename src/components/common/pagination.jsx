@@ -18,8 +18,6 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
         >
           <a
             className="page-link"
-            tabIndex="-1"
-            aria-disabled="true"
             onClick={() => onPageChange(currentPage - 1)}
           >
             السابق

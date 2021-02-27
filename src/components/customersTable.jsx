@@ -5,8 +5,8 @@ import TableBody from "./common/tableBody";
 
 class CustomersTable extends Component {
   columns = [
-    { path: "id", label: "الرقم" },
     { path: "name", label: "الاسم" },
+    { path: "phone", label: "رقم الهاتف" },
     { path: "address", label: "العنوان" },
     {
       key: "edit-delete",
@@ -14,7 +14,7 @@ class CustomersTable extends Component {
         <React.Fragment>
           <Link
             className="btn btn-primary btn-sm ml-2"
-            to={`/customers/${customer.id}`}
+            to={`/customers/${customer._id}`}
           >
             تعديل
           </Link>

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({ user }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
@@ -35,16 +35,34 @@ const NavBar = () => {
               المبيعات
             </NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/login">
-              دخول
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/register">
-              حساب جديد
-            </NavLink>
-          </li>
+          {!user && (
+            <>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/login">
+                  دخول
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/register">
+                  حساب جديد
+                </NavLink>
+              </li>
+            </>
+          )}
+          {user && (
+            <>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/profile">
+                  مرحباً {user.name}
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/logout">
+                  خروج
+                </NavLink>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

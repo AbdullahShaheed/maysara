@@ -2,12 +2,14 @@ export const customers = [
   {
     id: "1",
     name: "أحمد كريم",
+    phone: "66666666",
     address: "بغداد",
   },
   {
     id: "2",
     name: "ستار جابر",
-    address: "الأنبار",
+    address: "كركوك",
+    phone: "545454",
   },
   {
     id: "3",
@@ -17,6 +19,7 @@ export const customers = [
   {
     id: "4",
     name: "محمود هادي",
+    phone: "764623674",
     address: "البصرة",
   },
   {
@@ -58,6 +61,7 @@ export function saveCustomer(customer) {
   const customerInDb = customers.find((c) => c.id === customer.id) || {};
 
   customerInDb.name = customer.name;
+  customerInDb.phone = customer.phone;
   customerInDb.address = customer.address;
 
   if (!customer.id) {

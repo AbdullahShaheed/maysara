@@ -1,6 +1,7 @@
 import React from "react";
 import Joi from "joi-browser";
-import { getCustomer, saveCustomer } from "./../services/fakeCustomerService";
+// import { getCustomer, saveCustomer } from "./../services/fakeCustomerService";
+import { getCustomer, saveCustomer } from "./../services/customerService";
 import Form from "./common/form";
 import Input from "./common/input";
 
@@ -8,26 +9,28 @@ class CustomerForm extends Form {
   state = {
     data: {
       name: "",
+      phone: "",
       address: "",
     },
     errors: {},
   };
 
   schema = {
-    id: Joi.string(),
+    _id: Joi.string(),
     name: Joi.string()
       .required()
       .error(() => {
         return { message: "إسم الزبون مطلوب" };
       }),
-    address: Joi.string(),
+    phone: Joi.string().allow("").allow(null),
+    address: Joi.string().allow("").allow(null),
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const customerId = this.props.match.params.id;
     if (customerId === "new") return;
 
-    const customer = getCustomer(customerId);
+    const { data: customer } = await getCustomer(customerId);
     if (!customer) return this.props.history.replace("/customers");
 
     this.setState({ data: this.mapToViewModel(customer) });
@@ -35,14 +38,15 @@ class CustomerForm extends Form {
 
   mapToViewModel = (customer) => {
     return {
-      id: customer.id,
+      _id: customer._id,
       name: customer.name,
+      phone: customer.phone,
       address: customer.address,
     };
   };
 
-  doSubmit() {
-    saveCustomer(this.state.data);
+  async doSubmit() {
+    await saveCustomer(this.state.data);
     this.props.history.push("/customers");
   }
 
@@ -59,6 +63,13 @@ class CustomerForm extends Form {
             error={errors.name}
             onChange={this.handleChange}
           />
+          <Input
+            name="phone"
+            label="رقم الهاتف"
+            value={data.phone}
+            error={errors.phone}
+            onChange={this.handleChange}
+          />
 
           <Input
             name="address"
@@ -67,6 +78,7 @@ class CustomerForm extends Form {
             error={errors.address}
             onChange={this.handleChange}
           />
+
           <button className="btn btn-primary">حفظ</button>
         </form>
       </div>

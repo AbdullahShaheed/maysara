@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
-import {
-  getCustomers,
-  deleteCustomer,
-} from "./../services/fakeCustomerService";
+import { toast } from "react-toastify";
+// import {
+//   getCustomers,
+//   deleteCustomer,
+// } from "./../services/fakeCustomerService";
+import { getCustomers, deleteCustomer } from "./../services/customerService";
 import { paginate } from "./../utils/paginate";
 import Pagination from "./common/pagination";
 import CustomersTable from "./customersTable";
@@ -20,8 +22,9 @@ class Customers extends Component {
     customerToDelete: null,
   };
 
-  componentDidMount() {
-    this.setState({ customers: getCustomers() });
+  async componentDidMount() {
+    const { data: customers } = await getCustomers();
+    this.setState({ customers });
   }
 
   handleDelete = (customer) => {
@@ -29,14 +32,22 @@ class Customers extends Component {
     this.toggleModal();
   };
 
-  doDelete = () => {
-    //--deleting from UI only
-    // const customers = this.state.customers.filter((p) => p.id !== id);
-    // this.setState({ customers });
+  doDelete = async () => {
+    const originalCustomers = this.state.customers;
+    const customers = originalCustomers.filter(
+      (c) => c._id !== this.state.customerToDelete._id
+    );
+    this.setState({ customers });
 
-    //--deleting from the immaginary db not only from UI
-    deleteCustomer(this.state.customerToDelete.id);
-    this.componentDidMount();
+    try {
+      await deleteCustomer(this.state.customerToDelete._id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast("This customer has been already deleted.");
+
+      this.setState({ customers: originalCustomers });
+    }
+
     this.toggleModal();
   };
 
@@ -70,22 +81,23 @@ class Customers extends Component {
       <>
         <p>يظهر {totalCount} من الزبائن في قاعدة البيانات</p>
 
-        <Pagination
-          itemsCount={totalCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        ></Pagination>
+        <Link to="/customers/new" className="btn btn-primary mb-2">
+          إضافة زبون جديد
+        </Link>
+
         <CustomersTable
           customers={customers}
           onDelete={this.handleDelete}
           onSort={this.handleSort}
           sortColumn={sortColumn}
         ></CustomersTable>
-        <Link to="/customers/new" className="btn btn-primary mb-2">
-          إضافة زبون جديد
-        </Link>
 
+        <Pagination
+          itemsCount={totalCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        ></Pagination>
         <ConfirmationBox
           onConfirm={this.doDelete}
           onCancel={this.toggleModal}

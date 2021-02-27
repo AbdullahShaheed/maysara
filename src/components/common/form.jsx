@@ -31,6 +31,12 @@ class Form extends Component {
     data[e.currentTarget.name] = e.currentTarget.value;
     this.setState({ data });
   };
+
+  handleGoldToggle = () => {
+    const data = { ...this.state.data };
+    data.isGold = !data.isGold;
+    this.setState({ data });
+  };
 }
 
 export default Form;

@@ -1,8 +1,11 @@
 import React from "react";
 import Joi from "joi-browser";
-import { getCategories } from "./../services/fakeCategoryService";
-import { getProduct } from "./../services/fakeProductService";
-import { saveProduct } from "./../services/fakeProductService";
+// import { getCategories } from "./../services/fakeCategoryService";
+import { getCategories } from "./../services/categoryService";
+// import { getProduct } from "./../services/fakeProductService";
+import { getProduct } from "./../services/productService";
+// import { saveProduct } from "./../services/fakeProductService";
+import { saveProduct } from "./../services/productService";
 import Form from "./common/form";
 import Input from "./common/input";
 import Select from "./common/select";
@@ -20,7 +23,7 @@ class ProductForm extends Form {
   };
 
   schema = {
-    id: Joi.string(),
+    _id: Joi.string(),
     name: Joi.string()
       .required()
       .error(() => {
@@ -47,30 +50,39 @@ class ProductForm extends Form {
       }),
   };
 
-  componentDidMount() {
-    const categories = getCategories();
+  async populateWithCategories() {
+    const { data: categories } = await getCategories();
     this.setState({ categories });
+  }
+  async populateWithProduct() {
+    try {
+      const productId = this.props.match.params.id;
+      if (productId === "new") return;
 
-    const productId = this.props.match.params.id;
-    if (productId === "new") return;
+      const { data: product } = await getProduct(productId);
+      this.setState({ data: this.mapToViewModel(product) });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        this.props.history.replace("/not-found");
+    }
+  }
 
-    const product = getProduct(productId);
-    if (!product) return this.props.history.replace("/not-found");
-
-    this.setState({ data: this.mapToViewModel(product) });
+  async componentDidMount() {
+    await this.populateWithCategories();
+    await this.populateWithProduct();
   }
   mapToViewModel(product) {
     return {
-      id: product.id,
+      _id: product._id,
       name: product.name,
-      categoryId: product.category.id,
+      categoryId: product.category._id,
       numberInStock: product.numberInStock,
       price: product.price,
     };
   }
 
-  doSubmit = () => {
-    saveProduct(this.state.data);
+  doSubmit = async () => {
+    await saveProduct(this.state.data);
     this.props.history.push("/products");
   };
 

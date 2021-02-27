@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
-import { getOrders } from "./../services/fakeOrderService";
+// import { getOrders } from "./../services/fakeOrderService";
+import { getOrders } from "./../services/orderService";
 import { paginate } from "./../utils/paginate";
 import Pagination from "./common/pagination";
 import OrdersTable from "./ordersTable";
@@ -14,8 +15,9 @@ class Orders extends Component {
     sortColumn: { path: "date", order: "asc" },
   };
 
-  componentDidMount() {
-    this.setState({ orders: getOrders() });
+  async componentDidMount() {
+    const { data: orders } = await getOrders();
+    this.setState({ orders });
   }
 
   handlePageChange = (page) => {

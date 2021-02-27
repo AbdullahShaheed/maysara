@@ -5,16 +5,17 @@ import TableBody from "./common/tableBody";
 
 class OrdersTable extends Component {
   columns = [
-    { path: "id", label: "الرقم" },
+    // { path: "_id", label: "الرقم" },
     { path: "date", label: "التاريخ" },
     { path: "customer.name", label: "الزبون" },
+    { path: "customer.phone", label: "رقم الهاتف" },
     {
       path: "orderedItems",
       label: "المواد",
       content: (order) => (
         <ul>
-          {order.orderedItems.map((item) => (
-            <li key={item.id}>{item.name}</li>
+          {order.items.map((item) => (
+            <li key={item._id}>{item.name}</li>
           ))}
         </ul>
       ),
@@ -25,7 +26,7 @@ class OrdersTable extends Component {
       content: (order) => (
         <Link
           className="btn btn-primary btn-sm ml-2"
-          to={`/orders/preview/${order.id}`}
+          to={`/orders/preview/${order._id}`}
         >
           معاينة
         </Link>

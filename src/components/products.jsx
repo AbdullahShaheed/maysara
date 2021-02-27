@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
-import { getProducts } from "./../services/fakeProductService";
-import { getCategories } from "./../services/fakeCategoryService";
+import { toast } from "react-toastify";
+import auth from "../services/authService";
+// import { getProducts } from "./../services/fakeProductService";
+// import { getCategories } from "./../services/fakeCategoryService";
+import { getProducts, deleteProduct } from "./../services/productService";
+import { getCategories } from "./../services/categoryService";
 import ProductsTable from "./productsTable";
 import Pagination from "./common/pagination";
 import ListGroup from "./common/listGroup";
@@ -30,23 +34,39 @@ class Products extends Component {
     productToDelete: null,
   };
 
-  componentDidMount() {
-    const products = getProducts();
-    const categories = [...getCategories(), { id: "", name: "الكل" }];
+  async componentDidMount() {
+    const { data: products } = await getProducts();
+    const { data } = await getCategories();
+    const categories = [...data, { _id: "", name: "الكل" }];
+
     const selectedCategory = categories[categories.length - 1];
+
     this.setState({ products, categories, selectedCategory });
   }
 
   handleDelete = (product) => {
+    if (!auth.getCurrentUser())
+      return toast("فقط المستخدم الأدمن يستطيع الحذف");
+
     this.setState({ productToDelete: product });
     this.toggleModal();
   };
 
-  doDelete = () => {
-    //Deleting from UI only. To delete it from the immaginary db we need to call deleteProduct in fakeProductService
-    const product = this.state.productToDelete;
-    const products = this.state.products.filter((p) => p.id !== product.id);
+  doDelete = async () => {
+    const originalProducts = this.state.products;
+    const products = originalProducts.filter(
+      (p) => p._id !== this.state.productToDelete._id
+    );
     this.setState({ products });
+
+    try {
+      await deleteProduct(this.state.productToDelete._id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast.error("This product has been already deleted.");
+
+      this.setState({ products: originalProducts });
+    }
     this.toggleModal();
   };
 
@@ -120,8 +140,8 @@ class Products extends Component {
       );
     else {
       filtered =
-        selectedCategory && selectedCategory.id
-          ? allProducts.filter((p) => p.category.id === selectedCategory.id)
+        selectedCategory && selectedCategory._id
+          ? allProducts.filter((p) => p.category._id === selectedCategory._id)
           : allProducts;
     }
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);

@@ -8,7 +8,7 @@ class TableBody extends Component {
   };
 
   createKey = (item, column) => {
-    return item.id + (column.path || column.key);
+    return item._id + (column.path || column.key);
   };
 
   render() {
@@ -17,7 +17,7 @@ class TableBody extends Component {
     return (
       <tbody>
         {data.map((item) => (
-          <tr key={item.id}>
+          <tr key={item._id}>
             {columns.map((column) => (
               <td key={this.createKey(item, column)}>
                 {this.renderCell(item, column)}

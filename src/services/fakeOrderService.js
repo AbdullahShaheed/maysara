@@ -5,7 +5,7 @@ const orders = [
   {
     id: "1",
     date: new Date("Jan 1 2020").toLocaleDateString(),
-    customer: { id: "1", name: "أحمد كريم" },
+    customer: { id: "1", name: "أحمد كريم", phone: "66666666" },
     orderedItems: [
       {
         id: "1",

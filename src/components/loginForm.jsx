@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
+import auth from "../services/authService";
 import Input from "./common/input";
 import Form from "./common/form";
 
@@ -22,10 +23,18 @@ class Login extends Form {
       }),
   };
 
-  doSubmit() {
-    //submit data to server, then redirect user to another page
-    console.log("submitted");
-    this.props.history.push("/");
+  async doSubmit() {
+    try {
+      const { username, password } = this.state.data;
+      await auth.login(username, password);
+      window.location = "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   }
 
   render() {

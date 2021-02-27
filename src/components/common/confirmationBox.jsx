@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const ConfirmationBox = ({ onCancel, onConfirm, visisble }) => {
   return (
-    <Modal isOpen={visisble}>
+    <Modal isOpen={visisble} fade={false}>
       <ModalHeader toggle={onCancel} />
       <ModalBody>هل أنت متأكد من حذف هذا السجل؟</ModalBody>
       <ModalFooter>

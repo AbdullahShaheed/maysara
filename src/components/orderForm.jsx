@@ -1,9 +1,12 @@
 import React from "react";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
-import { getCustomers } from "./../services/fakeCustomerService";
-import { saveOrder } from "./../services/fakeOrderService";
-import { getProducts, getProduct } from "./../services/fakeProductService";
+// import { getCustomers } from "./../services/fakeCustomerService";
+// import { saveOrder } from "./../services/fakeOrderService";
+// import { getProducts, getProduct } from "./../services/fakeProductService";
+import { getCustomers } from "./../services/customerService";
+import { saveOrder } from "./../services/orderService";
+import { getProducts, getProduct } from "./../services/productService";
 import Form from "./common/form";
 import Input from "./common/input";
 import Select from "./common/select";
@@ -16,7 +19,7 @@ class OrderForm extends Form {
     data: {
       date: "",
       customerId: "",
-      orderedItems: [],
+      items: [],
       total: "",
     },
     customers: [],
@@ -27,7 +30,7 @@ class OrderForm extends Form {
     insufficientQty: false,
   };
 
-  orderedItemsColumns = [
+  itemsColumns = [
     { path: "name", label: "المادة" },
     {
       path: "qty",
@@ -54,7 +57,7 @@ class OrderForm extends Form {
       content: (item) => (
         <button
           className="btn btn-danger btn-sm"
-          onClick={() => this.handleDelete(item.id)}
+          onClick={() => this.handleDelete(item.productId)}
         >
           X
         </button>
@@ -63,8 +66,8 @@ class OrderForm extends Form {
   ];
 
   schema = {
-    id: Joi.string(),
-    date: Joi.string()
+    _id: Joi.string(),
+    date: Joi.date()
       .required()
       .error(() => {
         return { message: "مطلوب تحديد التاريخ" };
@@ -74,7 +77,7 @@ class OrderForm extends Form {
       .error(() => {
         return { message: "مطلوب تحديد زبون" };
       }),
-    orderedItems: Joi.array(),
+    items: Joi.array(),
     total: Joi.number(),
   };
   /*
@@ -94,31 +97,38 @@ class OrderForm extends Form {
 
   //   this.setState({ data: order });
   // }; */
+
+  async componentDidMount() {
+    const { data: customers } = await getCustomers();
+    const { data: products } = await getProducts();
+    this.setState({ customers, products });
+  }
+
   handleProductSelect = (product) => {
     const order = this.state.data;
-    const orderItem = {
-      id: product.id,
+    const item = {
+      productId: product._id,
       name: product.name,
       qty: 1,
       price: product.price,
       totalPrice: product.price,
     };
-    order.orderedItems.push(orderItem);
+    order.items.push(item);
     order.total = this.calculateTotal();
 
     this.setState({ data: order });
   };
 
-  handleQtyChange = (e, item) => {
+  handleQtyChange = async (e, item) => {
     const order = { ...this.state.data };
-    const items = order.orderedItems;
+    const items = order.items;
 
     const index = items.indexOf(item);
     items[index] = { ...item };
 
     const qty = parseInt(e.currentTarget.value, 10);
 
-    const stock = getProduct(item.id).numberInStock;
+    const stock = await getProduct(item.productId).numberInStock;
 
     if (qty > stock) {
       toast(`الرصيد غير كافي. الكمية المتوفرة:  ${stock}`);
@@ -133,15 +143,9 @@ class OrderForm extends Form {
     this.setState({ data: order });
   };
 
-  componentDidMount() {
-    const customers = getCustomers();
-    const products = getProducts();
-    this.setState({ customers, products });
-  }
-
-  doSubmit = () => {
-    const order = saveOrder(this.state.data);
-    if (!order.id) {
+  doSubmit = async () => {
+    const { data: order } = await saveOrder(this.state.data);
+    if (!order._id) {
       toast.error("هناك خطأ أدى لفشل حفظ الفاتورة");
       return;
     }
@@ -151,8 +155,8 @@ class OrderForm extends Form {
 
   handleDelete = (id) => {
     const order = this.state.data;
-    const items = [...order.orderedItems];
-    order.orderedItems = items.filter((item) => item.id !== id);
+    const items = [...order.items];
+    order.items = items.filter((item) => item.productId !== id);
     order.total = this.calculateTotal();
 
     this.setState({ data: order });
@@ -160,8 +164,7 @@ class OrderForm extends Form {
 
   calculateTotal() {
     let sum = 0;
-    for (let item of this.state.data.orderedItems)
-      sum += item.totalPrice.valueOf();
+    for (let item of this.state.data.items) sum += item.totalPrice.valueOf();
     return sum;
   }
   render() {
@@ -196,14 +199,11 @@ class OrderForm extends Form {
 
           <table className="table table-bordered">
             <TableHeader
-              columns={this.orderedItemsColumns}
+              columns={this.itemsColumns}
               sortColumn={{ path: "" }}
               onSort={() => null}
             />
-            <TableBody
-              data={data.orderedItems}
-              columns={this.orderedItemsColumns}
-            />
+            <TableBody data={data.items} columns={this.itemsColumns} />
           </table>
           <p
             style={{ textAlign: "left", fontWeight: "bold" }}

@@ -6,28 +6,28 @@ import Like from "./common/like";
 
 class ProductsTable extends Component {
   columns = [
-    { path: "id", label: "رقم المنتوج" },
     { path: "name", label: "إسم المنتوج" },
     { path: "category.name", label: "الفئة" },
     { path: "numberInStock", label: "الكمية المتوفرة" },
     { path: "price", label: "السعر" },
-    {
-      key: "like",
-      label: "مرغوب",
-      content: (product) => (
-        <Like
-          liked={product.liked}
-          onClick={() => this.props.onLike(product)}
-        ></Like>
-      ),
-    },
+    //---Here in maysara I would like to hide the like column because liked field is not in the mongoDB database
+    // {
+    //   key: "like",
+    //   label: "مرغوب",
+    //   content: (product) => (
+    //     <Like
+    //       liked={product.liked}
+    //       onClick={() => this.props.onLike(product)}
+    //     ></Like>
+    //   ),
+    // },
     {
       key: "edit-delete",
       content: (product) => (
         <React.Fragment>
           <Link
             className="btn btn-primary btn-sm ml-2"
-            to={`/products/${product.id}`}
+            to={`/products/${product._id}`}
           >
             تعديل
           </Link>
