@@ -76,7 +76,6 @@ class Customers extends Component {
     const { currentPage, pageSize, sortColumn } = this.state;
     const { totalCount, customers } = this.getPagedData();
 
-    if (totalCount === 0) return <p>لا يوجد زبائن في قاعدة البيانات</p>;
     return (
       <>
         <p>يظهر {totalCount} من الزبائن في قاعدة البيانات</p>

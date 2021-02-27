@@ -40,7 +40,6 @@ class Orders extends Component {
     const { currentPage, pageSize, sortColumn } = this.state;
     const { totalCount, orders } = this.getPagedData();
 
-    if (totalCount === 0) return <p>لا يوجد فواتير في قاعدة البيانات</p>;
     return (
       <>
         <p>يظهر {totalCount} من الفواتير في قاعدة البيانات</p>
