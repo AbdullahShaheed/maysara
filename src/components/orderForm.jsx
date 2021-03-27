@@ -178,6 +178,7 @@ class OrderForm extends Form {
               <Input
                 name="date"
                 label="التاريخ"
+                type="date"
                 value={data.date}
                 error={errors.date}
                 onChange={this.handleChange}
