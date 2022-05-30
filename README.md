@@ -20,6 +20,7 @@ user4@doamin.com  1234   ordinary use
 
 
 تصحيحات على مشروع ميسرة:
+
 1- حقل التاريخ في صفحة فاتورة جديدة، المفروض أضع date picker وهو موجود natively بالـ HTML لكني لم أكن أعرف ذلك قبل كورس موش HTML & CSS ، فقط هكذا: 
 
 <input type="date"/>
@@ -40,4 +41,8 @@ user4@doamin.com  1234   ordinary use
     
 طبعاً هذه الـ datalist في البرنامج سوف تأخذ قيمها dynamically من مصدر البيانات باستخدام الـ map function وسوف يُرسل الى الخادم الـ value أي الـ id للقيمة المختارة من القائمة تلقائياً.
 
-إذا أردنا ألا تظهر الـ values مع الـ text يمكننا استخدام custom attribute للـ option وذلك بسبق  أي attribute مخصصة نعملها بـ (data-) فهنا نقول data-value="1" ويتم ارسال هذه الـ data-value الى الخادم.
+إذا أردنا ألا تظهر الـ values مع الـ text يمكننا استخدام custom attribute للـ option وذلك بسبق  أي attribute مخصصة نعملها بـ
+(data-)
+فهنا نقول
+data-value="1"
+ويتم ارسال هذه الـ data-value الى الخادم.
