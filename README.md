@@ -5,6 +5,21 @@
 لتشغيل التطبيق إضغط الرابط التالي: 
 https://almaysara.herokuapp.com
 
+
+الحسابات: 
+
+user1@domain.com    admin user
+1234
+
+user2@domain.com    ordinary user
+1234
+
+user3@doamin.com     ordinary user
+1234
+
+user4@doamin.com     ordinary use
+1234
+
 تحسينات مطلوبة:
 
 1- جعل حقل التاريخ في النموذج الفاتورة الجديدة datetime picker وليس ادخال يدوي.
