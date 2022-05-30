@@ -16,6 +16,18 @@ user3@doamin.com  1234   ordinary user
 
 user4@doamin.com  1234   ordinary use
 
-تحسينات مطلوبة:
+تصحيحات مطلوبة:
 
-1- جعل حقل التاريخ في النموذج الفاتورة الجديدة datetime picker وليس ادخال يدوي.
+
+تصحيحات على مشروع ميسرة:
+1- حقل التاريخ في صفحة فاتورة جديدة، المفروض أضع date picker وهو موجود natively بالـ HTML لكني لم أكن أعرف ذلك قبل كورس موش HTML & CSS ، فقط هكذا: 
+<input type="date"/>
+2- في نفس الصفحة لحقلي اختيار الزبون والمنتوج كنت قد عملت reusable component أسميته autoCompleteBox في حين أن عملية إظهار suggestions عند الدخول الى input field هي موجودة natively أيضاً في HTML لكن لم أكن أعرف ذلك قبل كورس موش (االدرس رقم 6 في القسم الثاني موضوع الـ Forms)، فالأمر فقط هكذا:
+<input type="text" list="customers" />
+    <datalist id="customers">
+        <option value="1">Zaid</option>
+        <option value="2">Mazin</option>
+        <option value="3">Maha</option>
+    </datalist>
+طبعاً هذه الـ datalist في البرنامج سوف تأخذ قيمها dynamically من مصدر البيانات باستخدام الـ map function وسوف يُرسل الى الخادم الـ value أي الـ id للقيمة المختارة من القائمة تلقائياً.
+إذا أردنا ألا تظهر الـ values مع الـ text يمكننا استخدام custom attribute للـ option وذلك بسبق  أي attribute مخصصة نعملها بـ (data-) فهنا نقول data-value="1" ويتم ارسال هذه الـ data-value الى الخادم.
