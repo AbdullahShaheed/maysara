@@ -39,4 +39,4 @@ user4@doamin.com  1234   ordinary use
     
 طبعاً هذه الـ datalist في البرنامج سوف تأخذ قيمها dynamically من مصدر البيانات باستخدام الـ map function وسوف يُرسل الى الخادم الـ value أي الـ id للقيمة المختارة من القائمة تلقائياً.
 
-إذا أردنا ألا تظهر الـ values مع الـ text يمكننا استخدام custom attribute للـ option وذلك بسبق  أي attribute مخصصة نعملها بـ (data-) فهنا نقول "1"=data-value ويتم ارسال هذه الـ data-value الى الخادم.
+إذا أردنا ألا تظهر الـ values مع الـ text يمكننا استخدام custom attribute للـ option وذلك بسبق  أي attribute مخصصة نعملها بـ (-data) فهنا نقول "1"=data-value ويتم ارسال هذه الـ data-value الى الخادم.
