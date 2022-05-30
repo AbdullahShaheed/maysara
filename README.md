@@ -19,8 +19,6 @@ user4@doamin.com  1234   ordinary use
 تصحيحات مطلوبة:
 
 
-تصحيحات على مشروع ميسرة:
-
 1- حقل التاريخ في صفحة فاتورة جديدة، المفروض أضع date picker وهو موجود natively بالـ HTML لكني لم أكن أعرف ذلك قبل كورس موش HTML & CSS ، فقط هكذا: 
 
 <input type="date"/>
