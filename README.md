@@ -8,17 +8,13 @@ https://almaysara.herokuapp.com
 
 الحسابات: 
 
-user1@domain.com    admin user
-1234
+user1@domain.com 1234   admin user
 
-user2@domain.com    ordinary user
-1234
+user2@domain.com  1234  ordinary user
 
-user3@doamin.com     ordinary user
-1234
+user3@doamin.com  1234   ordinary user
 
-user4@doamin.com     ordinary use
-1234
+user4@doamin.com  1234   ordinary use
 
 تحسينات مطلوبة:
 
